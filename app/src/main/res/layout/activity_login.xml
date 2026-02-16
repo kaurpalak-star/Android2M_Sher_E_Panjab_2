@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/TV1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="REGISTER"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="70dp"
+        android:textColor="@color/Main"
+        />
+
+    <EditText
+        android:id="@+id/Et1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:layout_below="@id/TV1"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        />
+
+    <EditText
+        android:id="@+id/Et2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:layout_below="@id/Et1"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Et2"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Sign Up"
+        android:textSize="20dp"
+        android:backgroundTint="@color/Main"
+        app:cornerRadius="10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_below="@id/btn1"
+        android:orientation="horizontal"
+        android:layout_margin="2dp"
+        >
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:layout_weight="1"
+        android:layout_marginLeft="20dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OR"
+        android:textSize="20sp"
+        />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="@color/black"
+            android:layout_weight="1"
+            android:layout_marginRight="20dp"
+            />
+
+    </LinearLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn1"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:text="Continue With Google"
+        android:textSize="20dp"
+        android:backgroundTint="@color/Main"
+        app:cornerRadius="10dp"
+        />
+
+    <TextView
+        android:id="@+id/TV2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Already have an account? SIGN IN"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:layout_below="@id/btn2"
+        android:textColor="@color/black"
+        />
+
+
+
+
+
+
+</RelativeLayout>

@@ -3,4 +3,9 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="ForestGreen">#ff2e6f40</color>
+    <color name="Main">#ffc72c41</color>
+    <color name="Sub1">#fff75c7b</color>
+
+
+
 </resources>
