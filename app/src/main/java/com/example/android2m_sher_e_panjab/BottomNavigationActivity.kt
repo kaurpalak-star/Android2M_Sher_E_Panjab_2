@@ -5,8 +5,13 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class BottomNavigationActivity : AppCompatActivity() {
+    private lateinit var upWithNavController: NavController
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -16,5 +21,10 @@ class BottomNavigationActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        val bottomNavigation = findViewById<BottomNavigationView>(R.id.nav_view)
+        val fragmentContainer = findNavController(R.id.fragment)
+
+        bottomNavigation.setupWithNavController(fragmentContainer)
     }
 }
