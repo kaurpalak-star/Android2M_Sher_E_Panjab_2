@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "575603684739",
+    "project_id": "sherpanjab13",
+    "storage_bucket": "sherpanjab13.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575603684739:android:a4fa756a4cb2cc1bc272b6",
+        "android_client_info": {
+          "package_name": "com.example.android2m_sher_e_panjab"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlQtJ0xzc8EOCf27mU8PIcqGyHcyiqnUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
