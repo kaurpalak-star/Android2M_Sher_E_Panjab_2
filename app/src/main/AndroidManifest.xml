@@ -15,7 +15,7 @@
             android:name="BottomNavigation.BottomNavigationActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".registerActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"

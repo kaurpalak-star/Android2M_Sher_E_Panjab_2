@@ -6,8 +6,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login"
-    tools:context=".LoginActivity">
+    android:background="@drawable/loginbg2"
+    tools:context=".registerActivity">
 
     <TextView
         android:id="@+id/TV1"
@@ -22,31 +22,46 @@
         />
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/Sub1"
+        android:layout_width="400dp"
+        android:layout_height="500dp"
+       app:cardBackgroundColor="@color/Sub1"
+        android:layout_below="@id/TV1"
+        android:layout_marginHorizontal="10dp"
+        android:alpha="0.9"
         >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/Et1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:hint="Email"
         android:layout_below="@id/TV1"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        />
+            android:background="@color/white"
+            android:textColorHint="@color/black"
 
-    <EditText
+
+            />
+
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/Et2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:hint="Password"
         android:layout_below="@id/Et1"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
+        android:background="@color/white"
+        android:textColorHint="@color/black"
+
         />
 
     <com.google.android.material.button.MaterialButton
@@ -61,6 +76,7 @@
         android:textSize="20dp"
         android:backgroundTint="@color/Main"
         app:cornerRadius="10dp"
+        android:alpha="1"
         />
 
     <LinearLayout
@@ -69,7 +85,8 @@
         android:gravity="center"
         android:layout_below="@id/btn1"
         android:orientation="horizontal"
-        android:layout_margin="2dp"
+        android:layout_marginHorizontal="2dp"
+        android:layout_marginTop="20dp"
         >
 
     <View
@@ -78,6 +95,7 @@
         android:background="@color/black"
         android:layout_weight="1"
         android:layout_marginLeft="20dp"
+
         />
 
     <TextView
@@ -85,6 +103,7 @@
         android:layout_height="wrap_content"
         android:text="OR"
         android:textSize="20sp"
+        android:textColor="@color/white"
         />
 
         <View
@@ -104,7 +123,7 @@
         android:layout_below="@+id/btn1"
         android:layout_marginRight="30dp"
         android:layout_marginLeft="30dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="Continue With Google"
         android:textSize="20dp"
         android:backgroundTint="@color/Main"
@@ -121,6 +140,7 @@
         android:layout_below="@id/btn2"
         android:textColor="@color/black"
         />
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 
