@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Android2M_Sher_E_Panjab">
-
+        <activity
+            android:name=".LoginActivity"
+            android:exported="false" />
         <activity
             android:name=".registerActivity"
             android:exported="false" />
@@ -26,8 +28,7 @@
         </activity>
         <activity
             android:name=".BottomNavigation.BottomNavigationActivity"
-            android:exported="false"
-             />
+            android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true" />

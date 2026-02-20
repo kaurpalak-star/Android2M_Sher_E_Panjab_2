@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/loginbg2"
+    tools:context=".LoginActivity">
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LOG IN"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:paddingTop="100dp"
+        android:textColor="@color/Main"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="400dp"
+        android:layout_height="300dp"
+        app:cardBackgroundColor="@color/Sub1"
+        android:layout_below="@id/tv1"
+        android:layout_marginHorizontal="10dp"
+        android:alpha="0.9"
+        android:layout_marginTop="50dp"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ET1"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/tv1"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/white"
+                android:hint="Email"
+                android:paddingStart="8dp"
+                android:textColorHint="@color/black"
+                />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/ET2"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_below="@id/ET1"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@color/white"
+                android:hint="Password"
+                android:paddingStart="8dp"
+                android:textColorHint="@color/black"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ET2"
+                android:text="Forgot Password?"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:layout_gravity="end"
+                android:layout_marginEnd="25dp"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/BTN1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ET2"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="30dp"
+                android:alpha="1"
+                android:backgroundTint="@color/Main"
+                android:text="Log In"
+                android:textSize="20dp"
+                app:cornerRadius="10dp"
+                />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</RelativeLayout>
