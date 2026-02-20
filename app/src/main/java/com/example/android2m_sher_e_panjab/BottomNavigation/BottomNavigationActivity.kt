@@ -1,4 +1,4 @@
-package BottomNavigation
+package com.example.android2m_sher_e_panjab.BottomNavigation
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge

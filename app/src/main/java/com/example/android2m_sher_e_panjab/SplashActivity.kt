@@ -1,6 +1,6 @@
 package com.example.android2m_sher_e_panjab
 
-import BottomNavigation.BottomNavigationActivity
+import com.example.android2m_sher_e_panjab.BottomNavigation.BottomNavigationActivity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -9,8 +9,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.firebase.auth.FirebaseAuth
 
 class SplashActivity : AppCompatActivity() {
+
+    var auth = FirebaseAuth.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -22,8 +25,19 @@ class SplashActivity : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, BottomNavigationActivity::class.java))
-            finish()
+
+
+            if(auth.currentUser == null) {
+
+                startActivity(Intent(this, registerActivity::class.java))
+                finish()
+            } else {
+                startActivity(Intent(this, BottomNavigationActivity::class.java))
+                finish()
+            }
+
+
+
         }, 3000)
 
 

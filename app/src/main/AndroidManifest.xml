@@ -11,9 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Android2M_Sher_E_Panjab">
-        <activity
-            android:name="BottomNavigation.BottomNavigationActivity"
-            android:exported="false" />
+
         <activity
             android:name=".registerActivity"
             android:exported="false" />
@@ -27,8 +25,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".BottomNavigationActivity"
-            android:exported="false" />
+            android:name=".BottomNavigation.BottomNavigationActivity"
+            android:exported="false"
+             />
         <activity
             android:name=".MainActivity"
             android:exported="true" />

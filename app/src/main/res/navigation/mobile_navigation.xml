@@ -7,27 +7,27 @@
 
     <fragment
         android:id="@+id/homeFragment"
-        android:name="BottomNavigation.HomeFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.HomeFragment"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home" />
     <fragment
         android:id="@+id/searchFragment"
-        android:name="BottomNavigation.SearchFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/addFragment"
-        android:name="BottomNavigation.AddFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.AddFragment"
         android:label="fragment_add"
         tools:layout="@layout/fragment_add"/>
     <fragment
         android:id="@+id/favouriteFragment"
-        android:name="BottomNavigation.FavouritesFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.FavouritesFragment"
         android:label="fragment_favourites"
         tools:layout="@layout/fragment_favourites"/>
     <fragment
         android:id="@+id/profileFragment"
-        android:name="BottomNavigation.ProfileFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
 

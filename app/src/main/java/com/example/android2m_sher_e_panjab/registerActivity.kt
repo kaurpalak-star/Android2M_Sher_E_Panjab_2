@@ -1,27 +1,20 @@
 package com.example.android2m_sher_e_panjab
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.example.android2m_sher_e_panjab.BottomNavigation.BottomNavigationActivity
+import com.example.android2m_sher_e_panjab.databinding.ActivityRegisterBinding
 import com.google.firebase.auth.FirebaseAuth
 
 class registerActivity : AppCompatActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-//        setContentView(R.layout.activity_register)
-//        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-//            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-//            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-//            insets
-//        }
-//    }
-//}package
 
 
-    lateinit var binding: ActivityregisterBinding
+    lateinit var binding: ActivityRegisterBinding
 
 
     var auth = FirebaseAuth.getInstance()
@@ -29,7 +22,7 @@ class registerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        binding = ActivityregisterBinding.inflate(layoutInflater)
+        binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -37,7 +30,7 @@ class registerActivity : AppCompatActivity() {
             insets
         }
 
-        val onClickListener = binding.submit.setOnClickListener {
+        binding.btn1.setOnClickListener {
 
             val email = binding.Et1.text.toString()
             val password = binding.Et2.text.toString()
