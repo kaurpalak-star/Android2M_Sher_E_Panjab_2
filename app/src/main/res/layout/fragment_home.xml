@@ -5,9 +5,22 @@
     tools:context=".BottomNavigation.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Home" />
+        android:layout_height="wrap_content"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="About Us"
+            android:layout_gravity="end"
+            android:padding="20dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/Main"/>
+
+
+    </com.google.android.material.appbar.MaterialToolbar>
 
 </FrameLayout>
