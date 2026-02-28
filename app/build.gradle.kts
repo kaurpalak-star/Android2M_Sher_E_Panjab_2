@@ -57,7 +57,6 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
-    implementation("com.google.firebase:firebase-auth:24.0.1")
     implementation("io.appwrite:sdk-for-android:12.0.0")
 
 

@@ -5,7 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android2m_sher_e_panjab.R
+import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.Item
+import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.ItemAdapter
+import com.example.android2m_sher_e_panjab.databinding.FragmentHomeBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -17,11 +21,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), ItemAdapter.OnItemClick {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
 
+    private lateinit var adapter: ItemAdapter
+
+    var list = arrayListOf<Item>()
+    private lateinit var binding: FragmentHomeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -34,8 +42,37 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+
+        binding = FragmentHomeBinding.inflate(layoutInflater)
+        return  binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        adapter = ItemAdapter(list,this)
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireActivity(),
+            LinearLayoutManager.HORIZONTAL,false)
+
+        binding.recyclerView.adapter = adapter
+        addData()
+    }
+
+
+    fun addData() {
+        list.add(Item("All"))
+        list.add(Item("Agricultural"))
+        list.add(Item("Residential"))
+        list.add(Item("Commercial"))
+        list.add(Item("Rent"))
+
+        adapter.notifyDataSetChanged()
+
+
+
+
+
     }
 
     companion object {
