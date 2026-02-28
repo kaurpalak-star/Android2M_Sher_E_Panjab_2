@@ -1,10 +1,9 @@
-package com.example.android2m_sher_e_panjab
+package com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab
 
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import com.google.android.gms.auth.api.signin.internal.Storage
 import io.appwrite.Client
 import io.appwrite.ID
 import io.appwrite.models.InputFile
@@ -13,18 +12,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 
-private val AppwriteManager.projectId: String
-    get() {
-        TODO()
-    }
-private val AppwriteManager.endpoint: String
-    get() {
-        TODO()
-    }
-private val AppwriteManager.bucketId: String
-    get() {
-        TODO()
-    }
 
 class AppwriteManager private constructor(private val context: Context){
     private val APPWRITE_PROJECT_ID = "699c31d1002bdae9525b"
@@ -32,6 +19,7 @@ class AppwriteManager private constructor(private val context: Context){
     private val APPWRITE_PUBLIC_ENDPOINT = "https://fra.cloud.appwrite.io/v1"
 
 
+    val bucketId = ""
     private val client = Client(context)
         .setEndpoint(APPWRITE_PUBLIC_ENDPOINT)
         .setProject(APPWRITE_PROJECT_ID)
@@ -57,7 +45,7 @@ class AppwriteManager private constructor(private val context: Context){
                 file = InputFile.fromFile(file)
             )
 
-            "$endpoint/storage/buckets/$bucketId/files/${uploadedFile.id}/view?project=$projectId"
+            "$APPWRITE_PUBLIC_ENDPOINT/storage/buckets/$bucketId/files/${uploadedFile.id}/view?project=$APPWRITE_PROJECT_ID"
         }
 
 
