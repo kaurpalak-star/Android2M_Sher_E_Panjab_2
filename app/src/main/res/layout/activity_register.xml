@@ -32,8 +32,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
         <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/Et1"
@@ -46,10 +45,7 @@
         android:layout_marginRight="30dp"
             android:background="@color/white"
             android:textColorHint="@color/black"
-            android:paddingStart="8dp"
-
-
-            />
+            android:paddingStart="8dp" />
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/Et2"

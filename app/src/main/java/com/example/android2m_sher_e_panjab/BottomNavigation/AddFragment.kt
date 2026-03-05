@@ -1,156 +1,171 @@
 package com.example.android2m_sher_e_panjab.BottomNavigation
 
+import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.android2m_sher_e_panjab.R
+import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.AppwriteManager
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.launch
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+// Data model for Firebase
+data class Property(
+    val id: String? = null,
+    val name: String = "",
+    val location: String = "",
+    val propertyType: String = "",
+    val soilType: String = "",
+    val area: String = "",
+    val areaUnit: String = "",
+    val contact: String = "",
+    val price: String = "",
+    val description: String = "",
+    val imageUrls: List<String> = emptyList()
+)
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class AddFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class AddFragment : Fragment(R.layout.fragment_add) {
 
-    private lateinit var spinner: Spinner
+    private lateinit var appwriteManager: AppwriteManager
+    private val database = FirebaseDatabase.getInstance().getReference("Properties")
 
-    private lateinit var areaTypeSpinner: Spinner
-
-    private lateinit var propertyTypeSpinner: Spinner
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add, container, false)
-    }
+    // To store selected image URIs
+    private var selectedImageUris = mutableListOf<Uri>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        appwriteManager = AppwriteManager.getInstance(requireContext())
 
-//        location spinner
-        spinner = view.findViewById<Spinner>(R.id.locationSpinner)
-        val list = arrayListOf<String>("Amritsar","Barnala","Bathinda","Faridkot","Fatehgarh Sahib","Fazilka","Ferozpur","Gurdaspur","Hoshiarpur","Jalandhar","Kapurthala","Ludhiana","Malerkotla","Mansa","Moga","Pathankot","Patiala","Rupnagar","Mohali","Sangrur","Nawanshahr","Sri Muktsar Sahib","Tarn Taran")
-        val adapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, list)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        // 1. Initialize UI Elements
+        val nameET = view.findViewById<TextInputEditText>(R.id.EdTx1)
+        val soilET = view.findViewById<TextInputEditText>(R.id.SoilType)
+        val areaET = view.findViewById<TextInputEditText>(R.id.Area)
+        val contactET = view.findViewById<TextInputEditText>(R.id.Contact)
+        val priceET = view.findViewById<TextInputEditText>(R.id.Price)
+        val descET = view.findViewById<TextInputEditText>(R.id.Description)
+        val btnPost = view.findViewById<Button>(R.id.btnPost) // Ensure you added this ID in XML
+        val imageContainer = view.findViewById<TextInputEditText>(R.id.Images)
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                p1: View?,
-                position: Int,
-                p3: Long
-            ) {
+        // 2. Setup Spinners
+        val locationSpinner = view.findViewById<Spinner>(R.id.locationSpinner)
+        val locations = arrayListOf("Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozpur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Malerkotla", "Mansa", "Moga", "Pathankot", "Patiala", "Rupnagar", "Mohali", "Sangrur", "Nawanshahr", "Sri Muktsar Sahib", "Tarn Taran")
+        setupSpinner(locationSpinner, locations)
 
-                val selectedItem = parent?.getItemAtPosition(position)
+        val propertySpinner = view.findViewById<Spinner>(R.id.propertySpinner)
+        val propertyTypes = arrayListOf("Agricultural", "Commercial", "Residential", "Rented")
+        setupSpinner(propertySpinner, propertyTypes)
 
-                Toast.makeText(requireActivity(), "${selectedItem.toString()}", Toast.LENGTH_SHORT).show()
+        val areaSpinner = view.findViewById<Spinner>(R.id.AreaSpinner)
+        val areaUnits = arrayListOf("Marla", "Killa", "SqFt", "BHK")
+        setupSpinner(areaSpinner, areaUnits)
 
+        // 3. Image Picker Logic
+        val pickImages = registerForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+            if (uris.isNotEmpty()) {
+                selectedImageUris.clear()
+                selectedImageUris.addAll(uris)
+                imageContainer.setText("${uris.size} Images Selected")
+                Toast.makeText(context, "Selected ${uris.size} images", Toast.LENGTH_SHORT).show()
             }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
         }
 
-//        Property Type
-        propertyTypeSpinner = view.findViewById<Spinner>(R.id.propertySpinner)
-        val propertyTypeList = arrayListOf<String>("Agricultural","Commercial","Residential","Rented")
-        val propertyAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, propertyTypeList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        propertyTypeSpinner.adapter = propertyAdapter
-        propertyTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                p1: View?,
-                position: Int,
-                p3: Long
-            ) {
-
-                val selectedItem = parent?.getItemAtPosition(position)
-
-                Toast.makeText(requireActivity(), "${selectedItem.toString()}", Toast.LENGTH_SHORT).show()
-
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
-            }
-
+        imageContainer.setOnClickListener {
+            pickImages.launch("image/*")
         }
 
-//        Area Type
-        areaTypeSpinner = view.findViewById<Spinner>(R.id.AreaSpinner)
-        val areaTypeList = arrayListOf<String>("Marla","Killa","SqFt","BHK")
-        val areaAdapter = ArrayAdapter(requireActivity(), android.R.layout.simple_spinner_dropdown_item, areaTypeList)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        areaTypeSpinner.adapter = areaAdapter
-        areaTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        // 4. Post Button Click
+        btnPost.setOnClickListener {
+            val name = nameET.text.toString().trim()
+            val contact = contactET.text.toString().trim()
+            val price = priceET.text.toString().trim()
 
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                p1: View?,
-                position: Int,
-                p3: Long
-            ) {
-
-                val selectedItem = parent?.getItemAtPosition(position)
-
-                Toast.makeText(requireActivity(), "${selectedItem.toString()}", Toast.LENGTH_SHORT).show()
-
+            // Basic Validation
+            if (name.isEmpty() || contact.isEmpty() || price.isEmpty()) {
+                Toast.makeText(context, "Please fill required fields", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-
+            if (selectedImageUris.size < 2) {
+                Toast.makeText(context, "Please select at least 2 images", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
             }
 
+            // Start the upload process
+            uploadAndSaveData(
+                name = name,
+                soil = soilET.text.toString(),
+                area = areaET.text.toString(),
+                contact = contact,
+                price = price,
+                desc = descET.text.toString(),
+                loc = locationSpinner.selectedItem.toString(),
+                pType = propertySpinner.selectedItem.toString(),
+                aUnit = areaSpinner.selectedItem.toString()
+            )
         }
-
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment AddFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AddFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun setupSpinner(spinner: Spinner, items: List<String>) {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, items)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+    }
+
+    private fun uploadAndSaveData(
+        name: String, soil: String, area: String, contact: String,
+        price: String, desc: String, loc: String, pType: String, aUnit: String
+    ) {
+        // Show a loading indicator if you have one
+        Toast.makeText(context, "Uploading property details...", Toast.LENGTH_SHORT).show()
+
+        lifecycleScope.launch {
+            try {
+                val uploadedUrls = mutableListOf<String>()
+
+                // 1. Upload to Appwrite Storage
+                selectedImageUris.forEach { uri ->
+                    val url = appwriteManager.uploadImageFromUri(uri)
+                    if (url != null) {
+                        uploadedUrls.add(url)
+                    }
                 }
+
+                // 2. Create Firebase Object
+                val propertyId = database.push().key ?: return@launch
+                val property = Property(
+                    id = propertyId,
+                    name = name,
+                    location = loc,
+                    propertyType = pType,
+                    soilType = soil,
+                    area = area,
+                    areaUnit = aUnit,
+                    contact = contact,
+                    price = price,
+                    description = desc,
+                    imageUrls = uploadedUrls
+                )
+
+                // 3. Save to Realtime Database
+                database.child(propertyId).setValue(property)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Property Posted Successfully!", Toast.LENGTH_LONG).show()
+                        // Optional: Clear fields or navigate away
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Firebase Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.e("Error",e.toString())
+                    }
+
+            } catch (e: Exception) {
+                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
             }
+        }
     }
 }
