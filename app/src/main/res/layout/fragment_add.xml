@@ -5,14 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".BottomNavigation.AddFragment">
+    tools:context=".BottomNavigation.AddFragment"
+    android:background="@color/Sub1">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
-
+        android:background="@color/Sub1">
 
    <TextView
        android:layout_width="match_parent"
@@ -22,8 +22,7 @@
        android:layout_margin="10dp"
        android:textSize="40sp"
        android:textStyle="bold|italic"
-       android:textColor="@color/Main"
-       />
+       android:textColor="@color/Main" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
@@ -217,6 +216,17 @@
             android:layout_height="179dp"
             android:background="@drawable/img_6" />
     </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btnPost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post"
+            android:textSize="15sp"
+            android:textColorHint="@color/white"
+            android:backgroundTint="@color/Main"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"/>
 
     </LinearLayout>
 </ScrollView>

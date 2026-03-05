@@ -19,7 +19,7 @@ class AppwriteManager private constructor(private val context: Context){
     private val APPWRITE_PUBLIC_ENDPOINT = "https://fra.cloud.appwrite.io/v1"
 
 
-    val bucketId = ""
+    val bucketId = "69a2d075002390185f01"
     private val client = Client(context)
         .setEndpoint(APPWRITE_PUBLIC_ENDPOINT)
         .setProject(APPWRITE_PROJECT_ID)
