@@ -69,10 +69,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnItemClick {
 
         adapter.notifyDataSetChanged()
 
-
-
-
-
     }
 
     companion object {

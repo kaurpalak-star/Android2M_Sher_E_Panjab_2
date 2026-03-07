@@ -8,26 +8,16 @@ import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.example.android2m_sher_e_panjab.Property
 import com.example.android2m_sher_e_panjab.R
 import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.AppwriteManager
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.launch
 
 // Data model for Firebase
-data class Property(
-    val id: String? = null,
-    val name: String = "",
-    val location: String = "",
-    val propertyType: String = "",
-    val soilType: String = "",
-    val area: String = "",
-    val areaUnit: String = "",
-    val contact: String = "",
-    val price: String = "",
-    val description: String = "",
-    val imageUrls: List<String> = emptyList()
-)
+
 
 class AddFragment : Fragment(R.layout.fragment_add) {
 
@@ -58,7 +48,7 @@ class AddFragment : Fragment(R.layout.fragment_add) {
         setupSpinner(locationSpinner, locations)
 
         val propertySpinner = view.findViewById<Spinner>(R.id.propertySpinner)
-        val propertyTypes = arrayListOf("Agricultural", "Commercial", "Residential", "Rented")
+        val propertyTypes = arrayListOf("Agricultural", "Commercial", "Residential", "On Rent")
         setupSpinner(propertySpinner, propertyTypes)
 
         val areaSpinner = view.findViewById<Spinner>(R.id.AreaSpinner)
@@ -149,7 +139,8 @@ class AddFragment : Fragment(R.layout.fragment_add) {
                     contact = contact,
                     price = price,
                     description = desc,
-                    imageUrls = uploadedUrls
+                    imageUrls = uploadedUrls,
+                    userid = FirebaseAuth.getInstance().currentUser?.uid
                 )
 
                 // 3. Save to Realtime Database
