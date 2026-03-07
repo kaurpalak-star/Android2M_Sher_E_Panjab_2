@@ -6,9 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.android2m_sher_e_panjab"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.android2m_sher_e_panjab"

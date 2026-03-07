@@ -39,6 +39,17 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        />
+<<<<<<< Updated upstream
+=======
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/propertyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+
+>>>>>>> Stashed changes
       </LinearLayout>
 
     <LinearLayout
