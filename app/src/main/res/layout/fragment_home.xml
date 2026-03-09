@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".BottomNavigation.HomeFragment">
 
@@ -10,50 +10,39 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="25dp"
             android:layout_height="25dp"
-            android:background="@drawable/magnifying_glass"
             android:layout_marginStart="265dp"
-            />
+            android:background="@drawable/magnifying_glass" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:text="About Us"
-            android:textColor="@color/Main"
             android:paddingStart="10dp"
-            />
+            android:text="About Us"
+            android:textColor="@color/Main" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView2"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_height="wrap_content" />
 
-    </LinearLayout>
 
     </LinearLayout>
 

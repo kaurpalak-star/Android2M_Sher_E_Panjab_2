@@ -1,11 +1,14 @@
 package com.example.android2m_sher_e_panjab.BottomNavigation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.android2m_sher_e_panjab.HomeAdapter
+import com.example.android2m_sher_e_panjab.Property
 import com.example.android2m_sher_e_panjab.R
 import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.Item
 import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.ItemAdapter
@@ -21,73 +24,106 @@ private const val ARG_PARAM2 = "param2"
  * Use the [HomeFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class  HomeFragment : Fragment(), ItemAdapter.OnItemClick {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class HomeFragment : Fragment(), ItemAdapter.OnItemClick, HomeAdapter.OnItemClick {
 
-    private lateinit var adapter: ItemAdapter
-
-    var list = arrayListOf<Item>()
     private lateinit var binding: FragmentHomeBinding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+
+    var TAG = "Home Fragment"
+
+    // Adapters
+    private lateinit var categoryAdapter: ItemAdapter
+    private lateinit var propertyAdapter: HomeAdapter
+
+    // Lists
+    private val categoryList = arrayListOf<Item>()
+    private val masterPropertyList = arrayListOf<Property>() // All properties
+    private val filteredPropertyList = arrayListOf<Property>() // Currently visible properties
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-
-        binding = FragmentHomeBinding.inflate(layoutInflater)
-        return  binding.root
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = ItemAdapter(list,this)
+        setupRecyclerViews()
+        addCategories()
+        addPropertyData() // Load your initial data
+    }
 
-        binding.recyclerView.layoutManager = LinearLayoutManager(requireActivity(),
-            LinearLayoutManager.HORIZONTAL,false)
+    private fun setupRecyclerViews() {
+        // 1. Setup Category RecyclerView (Horizontal)
+        categoryAdapter = ItemAdapter(categoryList, this)
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.recyclerView.adapter = categoryAdapter
 
-        binding.recyclerView.adapter = adapter
-        addData()
+        // 2. Setup Property RecyclerView (Vertical)
+        // Ensure you have a second RecyclerView in your XML, e.g., binding.recyclerViewProperties
+        propertyAdapter = HomeAdapter(filteredPropertyList, this)
+        binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView2.adapter = propertyAdapter
+    }
+
+    // This triggers when you click "Agricultural", "Residential", etc.
+    override fun onItemClick(currentItem: Property) {
+        filterProperties(currentItem.propertyType.toString())
+    }
+
+    override fun onFavouriteClick(
+        property: Property,
+        position: Int
+    ) {
     }
 
 
-    fun addData() {
-        list.add(Item("All"))
-        list.add(Item("Agricultural"))
-        list.add(Item("Residential"))
-        list.add(Item("Commercial"))
-        list.add(Item("Rent"))
+    private fun filterProperties(category: String) {
+        filteredPropertyList.clear()
 
-        adapter.notifyDataSetChanged()
-
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        if (category == "All") {
+            filteredPropertyList.addAll(masterPropertyList)
+        } else {
+            // Filter based on propertyType
+            val filtered = masterPropertyList.filter {
+                it.propertyType.equals(category, ignoreCase = true)
             }
+            filteredPropertyList.addAll(filtered)
+        }
+
+        Log.d(TAG,filteredPropertyList.toString())
+
+        propertyAdapter.notifyDataSetChanged()
+    }
+
+    private fun addCategories() {
+        categoryList.apply {
+            clear()
+            add(Item("All"))
+            add(Item("Agricultural"))
+            add(Item("Residential"))
+            add(Item("Commercial"))
+            add(Item("Rent"))
+        }
+        categoryAdapter.notifyDataSetChanged()
+    }
+
+    private fun addPropertyData() {
+        // Mock Data - In a real app, this comes from Firebase or an API
+        masterPropertyList.add(Property("Farm Land", "Jalandhar", "5000 sqft", "Agricultural", "₹50L", arrayListOf("url1").toString()))
+        masterPropertyList.add(Property("Modern Villa", "Model Town", "2500 sqft", "Residential", "₹1.2Cr", arrayListOf("url2").toString()))
+        masterPropertyList.add(Property("Shop Space", "Civil Lines", "800 sqft", "Commercial", "₹30L", arrayListOf("url3").toString()))
+
+        // Initially show all
+        filterProperties("All")
+    }
+
+    override fun onClick(item: String) {
+
+        Log.d(TAG,"on item clicked")
+        filterProperties(item)
+
     }
 }

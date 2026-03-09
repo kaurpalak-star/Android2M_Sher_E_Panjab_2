@@ -10,69 +10,70 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 // Ensure these imports match your actual project structure
 import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.ItemAdapter.OnItemClick
+import com.example.android2m_sher_e_panjab.databinding.LayoutHomeBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+class HomeAdapter(
+    private var list: List<Property>,
+    private val onClick: OnItemClick
+) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
-class HomeAdapter (
-    var list : ArrayList<Property>,
-    val onClick: OnItemClick
-): RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+    // Use ViewBinding for cleaner code and better performance
+    inner class ViewHolder(val binding: LayoutHomeBinding) : RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): HomeAdapter.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.layout_home, parent, false)
-        return ViewHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val binding = LayoutHomeBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding)
     }
 
-    inner class ViewHolder(val view: View): RecyclerView.ViewHolder(view) {
-        var propertyImage: ImageView = view.findViewById(R.id.ImageProperty)
-        var favouriteButton: FloatingActionButton = view.findViewById(R.id.addFav)
-        var location: TextView = view.findViewById(R.id.location)
-        var price: TextView = view.findViewById(R.id.Price)
-        var area: TextView = view.findViewById(R.id.area)
-        var category: TextView = view.findViewById(R.id.category)
-        var checkButton: Button = view.findViewById(R.id.checkButton)
-    }
-
-    override fun onBindViewHolder(holder: HomeAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = list[position]
 
-        // Binding data to views
-        holder.location.text = currentItem.location
-        holder.price.text = currentItem.price
-        holder.area.text = currentItem.area
-        holder.category.text = currentItem.propertyType
+        with(holder.binding) {
+            // Binding data
+            location.text = currentItem.location
+            Price.text = currentItem.price
+            area.text = currentItem.area
+            category.text = currentItem.propertyType
 
-        // If using a library like Glide or Picasso for images:
-         Glide.with(holder.view.context).load(currentItem.imageUrls[0]).into(holder.propertyImage)
-        // Or setting a local resource:
-//        holder.propertyImage.setImageResource(currentItem.imageRes)
+            // Loading image (Added a placeholder/error for better UX)
+            if (currentItem.imageUrls.isNotEmpty()) {
+                Glide.with(root.context)
+                    .load(currentItem.imageUrls[0])
+                    .placeholder(R.drawable.home)
+                    .centerCrop()
+                    .into(ImageProperty)
+            }
 
-        // Setting up click listeners
+            // Click Listeners
+            checkButton.setOnClickListener {
+                onClick.onItemClick(currentItem)
+            }
 
-        holder.checkButton.setOnClickListener {
-            // You can add specific logic for the button here or use the same interface
-            onClick.onItemClick(currentItem)
-        }
+            addFav.setOnClickListener {
+                onClick.onFavouriteClick(currentItem, position)
+            }
 
-        holder.favouriteButton.setOnClickListener {
-            // Handle favorite logic
+            // Whole card click (Optional but recommended)
+            root.setOnClickListener {
+                onClick.onItemClick(currentItem)
+            }
         }
     }
 
-    override fun getItemCount(): Int {
-        return list.size
-    }
+    override fun getItemCount(): Int = list.size
 
-    // Optional: Helper method to update the list
-    fun updateData(newList: ArrayList<Property>) {
+    fun updateData(newList: List<Property>) {
+        // For simple updates, this works, but consider DiffUtil for larger lists
         this.list = newList
         notifyDataSetChanged()
     }
 
-
     interface OnItemClick {
-        fun onItemClick(currentItem : Property)
+        fun onItemClick(property: Property)
+        fun onFavouriteClick(property: Property, position: Int)
     }
 }

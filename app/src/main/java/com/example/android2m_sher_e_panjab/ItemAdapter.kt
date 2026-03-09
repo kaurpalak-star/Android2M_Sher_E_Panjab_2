@@ -27,6 +27,14 @@ class ItemAdapter (
         var item =list[position]
 
         holder.name.text = item.categoryName
+
+        holder.name.setOnClickListener {
+            onClick.onClick(item.categoryName.toString())
+        }
+
+        holder.view.setOnClickListener {
+            onClick.onClick(item.categoryName.toString())
+        }
     }
 
     override fun getItemCount(): Int {
@@ -40,6 +48,8 @@ class ItemAdapter (
 
     interface OnItemClick {
 
+
+        fun onClick(item: String)
     }
 
 
