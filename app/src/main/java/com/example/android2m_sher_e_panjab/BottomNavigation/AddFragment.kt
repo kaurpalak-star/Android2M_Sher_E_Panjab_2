@@ -32,6 +32,8 @@ class AddFragment : Fragment(R.layout.fragment_add) {
 
         appwriteManager = AppwriteManager.getInstance(requireContext())
 
+
+//        seedMockData()
         // 1. Initialize UI Elements
         val nameET = view.findViewById<TextInputEditText>(R.id.EdTx1)
         val soilET = view.findViewById<TextInputEditText>(R.id.SoilType)
@@ -159,4 +161,39 @@ class AddFragment : Fragment(R.layout.fragment_add) {
             }
         }
     }
+
+    private fun seedMockData() {
+        val categories = listOf("Agricultural", "Commercial", "Residential", "On Rent")
+        val locations = listOf("Amritsar", "Jalandhar", "Ludhiana", "Patiala", "Bathinda")
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "admin_user"
+
+        categories.forEach { category ->
+            for (i in 1..5) {
+                val propertyId = database.push().key ?: ""
+
+                val mockProperty = Property(
+                    id = propertyId,
+                    userid = currentUserId,
+                    name = "$category Property #$i",
+                    location = locations.random(),
+                    propertyType = category,
+                    soilType = if (category == "Agricultural") "Alluvial" else "N/A",
+                    area = "${(10..500).random()}",
+                    areaUnit = if (category == "Residential") "BHK" else "Killa",
+                    contact = "98765-4321$i",
+                    price = "₹${(20..95).random()} Lakh",
+                    description = "This is a premium $category property located in the heart of Punjab. Excellent investment opportunity.",
+                    imageUrls = listOf(
+                        "https://picsum.photos/seed/${category}$i/400/300",
+                        "https://picsum.photos/seed/${category}${i+10}/400/300"
+                    )
+                )
+
+                // Save to Firebase
+                database.child(propertyId).setValue(mockProperty)
+            }
+        }
+        Toast.makeText(context, "Database Seeded: 20 Properties Added!", Toast.LENGTH_SHORT).show()
+    }
+
 }

@@ -30,5 +30,10 @@
         android:name="com.example.android2m_sher_e_panjab.BottomNavigation.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/viewFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.ViewFragment"
+        android:label="fragment_view"
+        tools:layout="@layout/fragment_view" />
 
 </navigation>

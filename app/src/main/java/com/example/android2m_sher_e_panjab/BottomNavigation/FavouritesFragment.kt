@@ -1,60 +1,103 @@
 package com.example.android2m_sher_e_panjab.BottomNavigation
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.android2m_sher_e_panjab.Property
 import com.example.android2m_sher_e_panjab.R
+import com.example.android2m_sher_e_panjab.databinding.FragmentFavouritesBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class FavouritesFragment : Fragment(), FavGridAdapter.OnItemClick {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [FavouritesFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class FavouritesFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var _binding: FragmentFavouritesBinding? = null
+    private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+    private lateinit var gridAdapter: FavGridAdapter
+    private val favList = arrayListOf<Property>()
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        _binding = FragmentFavouritesBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        gridAdapter = FavGridAdapter(favList, this)
+        binding.favRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.favRecyclerView.adapter = gridAdapter
+
+        fetchFavourites()
+    }
+
+    private fun fetchFavourites() {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val ref = FirebaseDatabase.getInstance().getReference("favourites").child(userId)
+
+        ref.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                favList.clear()
+                for (data in snapshot.children) {
+                    val p = data.getValue(Property::class.java)
+                    p?.let { favList.add(it) }
+                }
+                gridAdapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
+    override fun onPropertyClick(property: Property) {
+        // Create the options for the Alert Dialog
+        val options = arrayOf("View Details", "Remove from Favourites")
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Property Options")
+        builder.setItems(options) { dialog, which ->
+            when (which) {
+                0 -> navigateToViewFragment(property) // "View Details" clicked
+                1 -> removeFromFavourites(property)   // "Remove" clicked
+            }
+        }
+        builder.show()
+    }
+
+    private fun navigateToViewFragment(property: Property) {
+        // Pass the property data to the ViewFragment
+        // Usually done using a Bundle or SafeArgs
+        val bundle = Bundle().apply {
+            putSerializable("property_data", property) // Ensure Property class implements Serializable
+        }
+
+        findNavController().navigate(R.id.viewFragment,bundle)
+        Toast.makeText(context, "Navigating to ${property.name}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun removeFromFavourites(property: Property) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: return
+        val propertyId = property.id ?: return
+
+        val ref = FirebaseDatabase.getInstance().getReference("favourites")
+            .child(userId)
+            .child(propertyId)
+
+        ref.removeValue().addOnSuccessListener {
+            Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show()
+        }.addOnFailureListener {
+            Toast.makeText(context, "Failed to remove: ${it.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favourites, container, false)
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FavouritesFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavouritesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

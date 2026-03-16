@@ -13,4 +13,4 @@ data class Property(
     val price: String = "",
     val description: String = "",
     val imageUrls: List<String> = emptyList()
-)
+): java.io.Serializable
