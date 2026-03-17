@@ -5,13 +5,30 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:padding="16dp"
+
     tools:context=".BottomNavigation.ProfileFragment">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Main"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SHER-E-PANJAB"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:textAlignment="center"/>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingTop="16dp"
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
@@ -62,12 +79,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
+        android:paddingHorizontal="16dp"
         android:text="This is where the user bio goes. A short description about yourself."
         android:textColor="@android:color/black"
         android:textSize="15sp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/profileEditBTN"
+        android:layout_marginHorizontal="16dp"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -86,6 +105,7 @@
         android:background="#eeeeee" />
 
     <TextView
+        android:paddingHorizontal="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"

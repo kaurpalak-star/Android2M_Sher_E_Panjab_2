@@ -4,6 +4,20 @@
     android:layout_height="match_parent"
     tools:context=".BottomNavigation.FavouritesFragment">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/Main"
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="SHER-E-PANJAB"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:textAlignment="center"/>
+    </com.google.android.material.appbar.MaterialToolbar>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/favRecyclerView"
