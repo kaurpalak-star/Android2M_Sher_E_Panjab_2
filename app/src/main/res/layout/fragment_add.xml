@@ -7,11 +7,34 @@
     android:fillViewport="true"
     tools:context=".BottomNavigation.AddFragment">
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+       >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/Main"
+            >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="SHER-E-PANJAB"
+                android:textStyle="bold"
+                android:textSize="30sp"
+                android:textColor="@color/white"
+                android:textAlignment="center"/>
+        </com.google.android.material.appbar.MaterialToolbar>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            >
+
 
         <TextView
             android:layout_width="match_parent"
@@ -364,6 +387,8 @@
             app:backgroundTint="#C72C41"
             app:cornerRadius="20dp"
             app:elevation="8dp" />
+        </LinearLayout>
+
 
     </LinearLayout>
 </ScrollView>

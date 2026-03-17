@@ -27,18 +27,29 @@
         android:orientation="horizontal"
         android:layout_marginTop="10dp">
 
-        <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="265dp"
-            android:background="@drawable/magnifying_glass" />
-
-        <TextView
+        <com.google.android.material.textfield.TextInputLayout
+            android:paddingHorizontal="16dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:paddingStart="10dp"
-            android:text="About Us"
-            android:textColor="@color/Main" />
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:startIconDrawable="@android:drawable/ic_search_category_default"
+            app:startIconTint="#C72C41"
+            app:boxCornerRadiusBottomEnd="16dp"
+            app:boxCornerRadiusBottomStart="16dp"
+            app:boxCornerRadiusTopEnd="16dp"
+            app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="#C72C41"
+            app:hintTextColor="#C72C41">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/EdTx1"
+                android:paddingStart="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search" />
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </LinearLayout>
 
