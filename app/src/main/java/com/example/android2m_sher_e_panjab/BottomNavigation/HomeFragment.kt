@@ -1,12 +1,15 @@
 package com.example.android2m_sher_e_panjab.BottomNavigation
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.android2m_sher_e_panjab.HomeAdapter
 import com.example.android2m_sher_e_panjab.Property
@@ -19,101 +22,129 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-
+import java.util.Locale
 class HomeFragment : Fragment(), ItemAdapter.OnItemClick, HomeAdapter.OnItemClick {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    private val TAG = "HomeFragment"
-
-    // Adapters
     private lateinit var categoryAdapter: ItemAdapter
     private lateinit var propertyAdapter: HomeAdapter
 
-    // Lists
     private val categoryList = arrayListOf<Item>()
-    private val masterPropertyList = arrayListOf<Property>() // Holds all data from Firebase
-    private val filteredPropertyList = arrayListOf<Property>() // Holds data shown to user
+    private val masterPropertyList = arrayListOf<Property>()
+    private val filteredPropertyList = arrayListOf<Property>()
+    private val userFavIds = arrayListOf<String>() // Track favorite IDs
 
-    // Firebase
+    private var currentCategory = "All"
+    private var currentSearchQuery = ""
+
     private val databaseReference = FirebaseDatabase.getInstance().getReference("Properties")
+    private val favReference = FirebaseDatabase.getInstance().getReference("favourites")
+    private val auth = FirebaseAuth.getInstance()
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupRecyclerViews()
         addCategories()
-        fetchPropertiesFromFirebase()
+        setupSearchListener()
+        fetchFavIdsAndProperties() // Unified fetch call
     }
 
     private fun setupRecyclerViews() {
-        // 1. Setup Category RecyclerView (Horizontal)
         categoryAdapter = ItemAdapter(categoryList, this)
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.recyclerView.adapter = categoryAdapter
 
-        // 2. Setup Property RecyclerView (Vertical)
-        propertyAdapter = HomeAdapter(filteredPropertyList, this)
+        // Initialized with empty fav list
+        propertyAdapter = HomeAdapter(filteredPropertyList, userFavIds, this)
         binding.recyclerView2.layoutManager = LinearLayoutManager(requireContext())
         binding.recyclerView2.adapter = propertyAdapter
     }
 
+    private fun fetchFavIdsAndProperties() {
+        val uid = auth.currentUser?.uid ?: return
+
+        // 1. Listen to Favourites in Real-time
+        favReference.child(uid).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                userFavIds.clear()
+                for (data in snapshot.children) {
+                    userFavIds.add(data.key ?: "") // The key is the property ID
+                }
+                // Refresh properties once favs are loaded
+                fetchPropertiesFromFirebase()
+            }
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     private fun fetchPropertiesFromFirebase() {
-        // This listener will trigger every time data changes in the "Properties" node
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 masterPropertyList.clear()
                 for (data in snapshot.children) {
-                    val property = data.getValue(Property::class.java)
-                    if (property != null) {
-                        masterPropertyList.add(property)
-                    }
+                    data.getValue(Property::class.java)?.let { masterPropertyList.add(it) }
                 }
-                // Once data is fetched, default view is "All"
-                filterProperties("All")
+                applyFilters()
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.e(TAG, "Database Error: ${error.message}")
-                Toast.makeText(context, "Failed to load data", Toast.LENGTH_SHORT).show()
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
-    /**
-     * Category selection from ItemAdapter (Horizontal list)
-     */
-    override fun onClick(item: String) {
-        Log.d(TAG, "Selected Category: $item")
-        filterProperties(item)
-    }
+    private fun applyFilters() {
+        val filtered = masterPropertyList.filter { property ->
+            val categoryMatches = if (currentCategory == "All") true
+            else property.propertyType.equals(currentCategory, ignoreCase = true) ||
+                    (currentCategory == "Rent" && property.propertyType.equals("On Rent", ignoreCase = true))
 
-    private fun filterProperties(category: String) {
-        filteredPropertyList.clear()
+            val searchMatches = if (currentSearchQuery.isEmpty()) true
+            else property.name.lowercase().contains(currentSearchQuery) ||
+                    property.propertyType.lowercase().contains(currentSearchQuery)
 
-        if (category == "All") {
-            filteredPropertyList.addAll(masterPropertyList)
-        } else {
-            // Filter logic:
-            // 1. Matches exact category
-            // 2. Handles "Rent" vs "On Rent" difference between Spinner and Category list
-            val filtered = masterPropertyList.filter {
-                it.propertyType.equals(category, ignoreCase = true) ||
-                        (category == "Rent" && it.propertyType.equals("On Rent", ignoreCase = true))
-            }
-            filteredPropertyList.addAll(filtered)
+            categoryMatches && searchMatches
         }
 
-        propertyAdapter.notifyDataSetChanged()
+        filteredPropertyList.clear()
+        filteredPropertyList.addAll(filtered)
+        // Pass both filtered list and current fav IDs to adapter
+        propertyAdapter.updateData(filteredPropertyList, userFavIds)
+    }
+
+    override fun onFavouriteClick(property: Property, position: Int) {
+        val uid = auth.currentUser?.uid ?: return
+        val propertyId = property.id ?: return
+        val itemRef = favReference.child(uid).child(propertyId)
+
+        if (userFavIds.contains(propertyId)) {
+            // Already in favs -> Remove it
+            itemRef.removeValue().addOnSuccessListener {
+                Toast.makeText(context, "Removed from Favourites", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // Not in favs -> Add it
+            itemRef.setValue(property).addOnSuccessListener {
+                Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // ... Keep existing setupSearchListener, addCategories, onClick, onItemClick, onDestroyView ...
+
+    private fun setupSearchListener() {
+        binding.EdTx1.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                currentSearchQuery = s.toString().trim().lowercase(Locale.getDefault())
+                applyFilters()
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
     }
 
     private fun addCategories() {
@@ -128,37 +159,29 @@ class HomeFragment : Fragment(), ItemAdapter.OnItemClick, HomeAdapter.OnItemClic
         categoryAdapter.notifyDataSetChanged()
     }
 
-    /**
-     * Handle adding to favourites in Firebase
-     * Path: favourites -> currentUserId -> propertyId -> property data
-     */
-    override fun onFavouriteClick(property: Property, position: Int) {
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        if (currentUser == null) {
-            Toast.makeText(context, "Please login to add favourites", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val propertyId = property.id ?: property.name.hashCode().toString()
-        val favRef = FirebaseDatabase.getInstance().getReference("favourites")
-            .child(currentUser.uid)
-            .child(propertyId)
-
-        favRef.setValue(property).addOnSuccessListener {
-            Toast.makeText(context, "Added to Favourites!", Toast.LENGTH_SHORT).show()
-        }.addOnFailureListener {
-            Toast.makeText(context, "Error: ${it.message}", Toast.LENGTH_SHORT).show()
-        }
+    override fun onClick(item: String) {
+        currentCategory = item
+        applyFilters()
     }
 
-    /**
-     * Handle item click to view details (optional)
-     */
     override fun onItemClick(currentItem: Property) {
-        // Implementation for opening a detail screen would go here
-        Log.d(TAG, "Clicked on: ${currentItem.name}")
-    }
+        Log.d("HomeFragment", "Navigating to: ${currentItem.name}")
 
+        // 1. Prepare the data bundle
+        val bundle = Bundle().apply {
+            // Ensure Property class implements java.io.Serializable
+            putSerializable("property_data", currentItem)
+        }
+
+        // 2. Navigate using NavController
+        // Ensure R.id.viewFragment matches the ID in your navigation_graph.xml
+        try {
+            findNavController().navigate(R.id.viewFragment, bundle)
+        } catch (e: Exception) {
+            Log.e("HomeFragment", "Navigation failed: ${e.message}")
+            Toast.makeText(context, "Navigation error", Toast.LENGTH_SHORT).show()
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

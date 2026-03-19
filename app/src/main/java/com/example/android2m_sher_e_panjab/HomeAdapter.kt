@@ -12,20 +12,18 @@ import com.bumptech.glide.Glide
 import com.example.android2m_sher_e_panjab.com.example.android2m_sher_e_panjab.ItemAdapter.OnItemClick
 import com.example.android2m_sher_e_panjab.databinding.LayoutHomeBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+
+
 class HomeAdapter(
-    private var list: List<Property>,
-    private val onClick: OnItemClick
+private var list: List<Property>,
+private var favList: List<String> = emptyList(), // Added favList
+private val onClick: OnItemClick
 ) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
 
-    // Use ViewBinding for cleaner code and better performance
     inner class ViewHolder(val binding: LayoutHomeBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding = LayoutHomeBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
-        )
+        val binding = LayoutHomeBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
@@ -33,13 +31,22 @@ class HomeAdapter(
         val currentItem = list[position]
 
         with(holder.binding) {
-            // Binding data
             location.text = currentItem.location
             Price.text = currentItem.price
             area.text = currentItem.area
             category.text = currentItem.propertyType
 
-            // Loading image (Added a placeholder/error for better UX)
+            // --- Favourite UI Logic ---
+            // If property ID is in favList, show filled heart, else border
+            if (favList.contains(currentItem.id)) {
+                addFav.visibility = View.GONE
+
+            } else {
+
+                addFav.setImageResource(R.drawable.img_2) // Ensure this exists (filled)
+
+            }
+
             if (currentItem.imageUrls.isNotEmpty()) {
                 Glide.with(root.context)
                     .load(currentItem.imageUrls[0])
@@ -48,27 +55,18 @@ class HomeAdapter(
                     .into(ImageProperty)
             }
 
-            // Click Listeners
-            checkButton.setOnClickListener {
-                onClick.onItemClick(currentItem)
-            }
-
-            addFav.setOnClickListener {
-                onClick.onFavouriteClick(currentItem, position)
-            }
-
-            // Whole card click (Optional but recommended)
-            root.setOnClickListener {
-                onClick.onItemClick(currentItem)
-            }
+            checkButton.setOnClickListener { onClick.onItemClick(currentItem) }
+            addFav.setOnClickListener { onClick.onFavouriteClick(currentItem, position) }
+            root.setOnClickListener { onClick.onItemClick(currentItem) }
         }
     }
 
     override fun getItemCount(): Int = list.size
 
-    fun updateData(newList: List<Property>) {
-        // For simple updates, this works, but consider DiffUtil for larger lists
+    // Updated to accept favorites list
+    fun updateData(newList: List<Property>, newFavList: List<String>) {
         this.list = newList
+        this.favList = newFavList
         notifyDataSetChanged()
     }
 

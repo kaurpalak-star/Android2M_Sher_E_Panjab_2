@@ -31,6 +31,11 @@ class registerActivity : AppCompatActivity() {
             insets
         }
 
+        binding.TV2.setOnClickListener {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.btn1.setOnClickListener {
 
             val email = binding.Et1.text.toString()

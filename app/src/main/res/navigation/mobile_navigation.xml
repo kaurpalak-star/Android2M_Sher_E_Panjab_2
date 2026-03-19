@@ -35,5 +35,14 @@
         android:name="com.example.android2m_sher_e_panjab.BottomNavigation.ViewFragment"
         android:label="fragment_view"
         tools:layout="@layout/fragment_view" />
+    <fragment
+        android:id="@+id/userPropertyFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.UserPropertyFragment"
+        android:label="fragment_user_property"
+        tools:layout="@layout/fragment_user_property" />
+    <fragment
+        android:id="@+id/analyticsFragment"
+        android:name="com.example.android2m_sher_e_panjab.BottomNavigation.AnalyticsFragment"
+        android:label="AnalyticsFragment" />
 
 </navigation>

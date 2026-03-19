@@ -59,8 +59,10 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("io.appwrite:sdk-for-android:12.0.0")
 
-
     implementation("com.github.bumptech.glide:glide:4.16.0")
+
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
 
 }

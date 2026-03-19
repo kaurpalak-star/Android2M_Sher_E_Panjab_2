@@ -48,6 +48,9 @@ class FavouritesFragment : Fragment(), FavGridAdapter.OnItemClick {
                 for (data in snapshot.children) {
                     val p = data.getValue(Property::class.java)
                     p?.let { favList.add(it) }
+
+
+                    print("this is the favourite list : ${favList.toString()}")
                 }
                 gridAdapter.notifyDataSetChanged()
             }

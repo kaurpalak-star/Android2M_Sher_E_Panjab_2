@@ -11,6 +11,11 @@
         android:icon="@drawable/img_1"
         android:title="Add"/>
 
+
+    <item
+        android:id="@+id/analyticsFragment"
+        android:icon="@drawable/img_2"
+        android:title="Analytics"/>
     <item
         android:id="@+id/favouriteFragment"
         android:icon="@drawable/img_2"
