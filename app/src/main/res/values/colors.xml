@@ -2,10 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="ForestGreen">#ff2e6f40</color>
-    <color name="Main">#ffc72c41</color>
-    <color name="Sub1">#ffffbccd</color>
-
-
-
+    <color name="ForestGreen">#FF2E6F40</color>
+    <color name="Main">#FFC72C41</color>
+    <color name="Sub1">#FFFFBCCD</color>
 </resources>

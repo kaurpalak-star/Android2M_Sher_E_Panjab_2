@@ -12,7 +12,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Android2M_Sher_E_Panjab">
         <activity
-<<<<<<< Updated upstream
             android:name=".LoginActivity"
             android:exported="false" />
         <activity
@@ -30,22 +29,9 @@
         <activity
             android:name=".BottomNavigation.BottomNavigationActivity"
             android:exported="false" />
-=======
-            android:name="BottomNavigation.BottomNavigationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".SplashActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".BottomNavigationActivity"
-            android:exported="false" />
->>>>>>> Stashed changes
+
+
         <activity
             android:name=".MainActivity"
             android:exported="true" />

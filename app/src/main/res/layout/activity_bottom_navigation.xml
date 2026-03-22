@@ -5,12 +5,8 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< Updated upstream
-    tools:context=".BottomNavigation.BottomNavigationActivity">
-=======
-    tools:context="BottomNavigation.BottomNavigationActivity">
+    >
 
->>>>>>> Stashed changes
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
@@ -18,13 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="0dp"
         android:layout_marginEnd="0dp"
-<<<<<<< Updated upstream
         android:background="@color/Main"
         style="@style/Widget.Design.BottomNavigationView"
-=======
-        android:background="?android:attr/windowBackground"
-        
->>>>>>> Stashed changes
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
